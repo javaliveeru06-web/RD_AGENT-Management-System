@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>RD System</h2>
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="customers.html">Customers</a>
+
+<a href="reports.html">Reports</a>
+
+</div>
+
+
+<div class="main-content">
+
+<h1>Dashboard</h1>
+
+<div class="cards">
+
+<div class="card">
+
+<h3>Total Customers</h3>
+<p id="total">0</p>
+
+</div>
+
+
+<div class="card"
+onclick="location.href='paid.html'">
+
+<h3>Paid Customers</h3>
+<p id="paid">0</p>
+
+</div>
+
+
+<div class="card"
+onclick="location.href='pending.html'">
+
+<h3>Pending Customers</h3>
+<p id="pending">0</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Total Collection</h3>
+<p id="collection">₹0</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Remaining Collection</h3>
+
+<p id="remaining">
+
+₹0
+
+</p>
+
+</div>
+
+</div>
+
+
+<br>
+
+<div class="card">
+
+<h2>Notifications</h2>
+
+<ul id="notificationList">
+
+</ul>
+
+</div>
+
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
