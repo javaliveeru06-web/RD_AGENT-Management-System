@@ -1,32 +1,172 @@
-window.onload=function(){
+/* =========================
+   RD MANAGEMENT SYSTEM
+   FULL UPDATED SCRIPT
+========================= */
 
-loadCustomers();
 
-updateDashboard();
+/* LOAD SAVED CUSTOMERS */
 
-loadNotifications();
+let customers =
+JSON.parse(
+localStorage.getItem(
+"customers"
+)
+) || [];
 
-loadPaidTable();
 
-loadPendingTable();
+
+/* SAVE CUSTOMERS */
+
+function saveCustomers(){
+
+localStorage.setItem(
+
+"customers",
+
+JSON.stringify(customers)
+
+);
+
+}
+
+
+
+/* =========================
+   ADD CUSTOMER
+========================= */
+
+function addCustomer(){
+
+
+const name =
+document.getElementById(
+"name"
+).value;
+
+
+const age =
+document.getElementById(
+"age"
+).value;
+
+
+const account =
+document.getElementById(
+"account"
+).value;
+
+
+const phone =
+document.getElementById(
+"phone"
+).value;
+
+
+const amount =
+document.getElementById(
+"amount"
+).value;
+
+
+const dueDate =
+document.getElementById(
+"dueDate"
+).value;
+
+
+
+/* VALIDATION */
+
+if(
+
+name=="" ||
+age=="" ||
+account=="" ||
+phone=="" ||
+amount=="" ||
+dueDate==""
+
+){
+
+alert(
+"Please fill all fields"
+);
+
+return;
+
+}
+
+
+
+/* CUSTOMER OBJECT */
+
+const customer = {
+
+name:name,
+
+age:age,
+
+account:account,
+
+phone:phone,
+
+amount:amount,
+
+dueDate:dueDate,
+
+status:"Pending"
 
 };
 
 
 
-// =================== LOAD CUSTOMERS ===================
+/* PUSH DATA */
+
+customers.push(customer);
+
+
+
+/* SAVE */
+
+saveCustomers();
+
+
+
+/* RELOAD */
+
+loadCustomers();
+
+updateDashboard();
+
+loadPaidTable();
+
+loadPendingTable();
+
+loadNotifications();
+
+
+
+/* CLEAR INPUTS */
+
+document.getElementById("name").value="";
+document.getElementById("age").value="";
+document.getElementById("account").value="";
+document.getElementById("phone").value="";
+document.getElementById("amount").value="";
+document.getElementById("dueDate").value="";
+
+}
+
+
+
+/* =========================
+   LOAD CUSTOMERS
+========================= */
 
 function loadCustomers(){
 
-let customers=
 
-JSON.parse(
-localStorage.getItem("customers")
-)||[];
-
-
-let table=
-
+const table =
 document.getElementById(
 "customerTable"
 );
@@ -36,17 +176,25 @@ if(!table)
 return;
 
 
-table.innerHTML=`
+
+table.innerHTML = `
 
 <tr>
 
 <th>Name</th>
+
 <th>Age</th>
+
 <th>Account</th>
+
 <th>Phone</th>
+
 <th>Amount</th>
+
 <th>Due Date</th>
+
 <th>Status</th>
+
 <th>Action</th>
 
 </tr>
@@ -54,9 +202,11 @@ table.innerHTML=`
 `;
 
 
+
 customers.forEach((customer,index)=>{
 
-table.innerHTML+=`
+
+table.innerHTML += `
 
 <tr>
 
@@ -68,13 +218,14 @@ table.innerHTML+=`
 
 <td>${customer.phone}</td>
 
-<td>₹${customer.amount}</td>
+<td>Rs.${customer.amount}</td>
 
 <td>${customer.dueDate}</td>
 
 <td>${customer.status}</td>
 
 <td>
+
 
 <button onclick="markPaid(${index})">
 
@@ -96,6 +247,7 @@ Delete
 
 </button>
 
+
 </td>
 
 </tr>
@@ -108,108 +260,15 @@ Delete
 
 
 
-// =================== ADD CUSTOMER ===================
-
-function addCustomer(){
-
-let customer={
-
-name:
-document.getElementById(
-"name"
-).value,
-
-age:
-document.getElementById(
-"age"
-).value,
-
-account:
-document.getElementById(
-"account"
-).value,
-
-phone:
-document.getElementById(
-"phone"
-).value,
-
-amount:
-document.getElementById(
-"amount"
-).value,
-
-dueDate:
-document.getElementById(
-"dueDate"
-).value,
-
-status:"Pending"
-
-};
-
-
-let customers=
-
-JSON.parse(
-localStorage.getItem(
-"customers"
-)
-)||[];
-
-
-customers.push(customer);
-
-
-localStorage.setItem(
-
-"customers",
-
-JSON.stringify(
-customers
-)
-
-);
-
-
-clearInputs();
-
-loadCustomers();
-
-updateDashboard();
-
-}
-
-
-
-
-// =================== MARK PAID ===================
+/* =========================
+   MARK PAID
+========================= */
 
 function markPaid(index){
 
-let customers=
+customers[index].status="Paid";
 
-JSON.parse(
-localStorage.getItem(
-"customers"
-)
-)||[];
-
-
-customers[index].status=
-"Paid";
-
-
-localStorage.setItem(
-
-"customers",
-
-JSON.stringify(
-customers
-)
-
-);
-
+saveCustomers();
 
 loadCustomers();
 
@@ -219,119 +278,87 @@ loadPaidTable();
 
 loadPendingTable();
 
+loadNotifications();
+
 }
 
 
 
-
-// =================== DELETE ===================
+/* =========================
+   DELETE CUSTOMER
+========================= */
 
 function deleteCustomer(index){
 
-let customers=
-
-JSON.parse(
-localStorage.getItem(
-"customers"
-)
-)||[];
-
-
 customers.splice(index,1);
 
-
-localStorage.setItem(
-
-"customers",
-
-JSON.stringify(
-customers
-)
-
-);
-
+saveCustomers();
 
 loadCustomers();
 
 updateDashboard();
 
+loadPaidTable();
+
+loadPendingTable();
+
+loadNotifications();
+
 }
 
 
 
-
-// =================== EDIT ===================
+/* =========================
+   EDIT CUSTOMER
+========================= */
 
 function editCustomer(index){
 
-let customers=
 
-JSON.parse(
-localStorage.getItem(
-"customers"
-)
-)||[];
-
-
-
-customers[index].name=
-
+customers[index].name =
 prompt(
-"Name",
+"Edit Name",
 customers[index].name
 );
 
 
-customers[index].age=
-
+customers[index].age =
 prompt(
-"Age",
+"Edit Age",
 customers[index].age
 );
 
 
-customers[index].account=
-
+customers[index].account =
 prompt(
-"Account",
+"Edit Account",
 customers[index].account
 );
 
 
-customers[index].phone=
-
+customers[index].phone =
 prompt(
-"Phone",
+"Edit Phone",
 customers[index].phone
 );
 
 
-customers[index].amount=
-
+customers[index].amount =
 prompt(
-"Amount",
+"Edit Amount",
 customers[index].amount
 );
 
 
-customers[index].dueDate=
-
+customers[index].dueDate =
 prompt(
-"Due Date",
+"Edit Due Date",
 customers[index].dueDate
 );
 
 
-localStorage.setItem(
 
-"customers",
-
-JSON.stringify(
-customers
-)
-
-);
-
+saveCustomers();
 
 loadCustomers();
 
@@ -341,134 +368,164 @@ updateDashboard();
 
 
 
-// =================== DASHBOARD ===================
+/* =========================
+   DASHBOARD UPDATE
+========================= */
 
 function updateDashboard(){
 
-let customers=
 
-JSON.parse(
-localStorage.getItem(
-"customers"
+const totalCustomers =
+customers.length;
+
+
+const paidCustomers =
+customers.filter(
+c=>c.status=="Paid"
+).length;
+
+
+const pendingCustomers =
+customers.filter(
+c=>c.status=="Pending"
+).length;
+
+
+
+const totalCollection =
+
+customers
+.filter(
+c=>c.status=="Paid"
 )
-)||[];
+.reduce(
+(sum,c)=>
+sum + Number(c.amount),
+0
+);
 
 
 
-let total=customers.length;
+const remainingCollection =
 
-let paid=0;
-
-let pending=0;
-
-let collection=0;
-
-let remaining=0;
-
-
-
-customers.forEach(customer=>{
+customers
+.filter(
+c=>c.status=="Pending"
+)
+.reduce(
+(sum,c)=>
+sum + Number(c.amount),
+0
+);
 
 
-if(customer.status=="Paid")
-{
 
-paid++;
-
-collection+=
-
-parseInt(
-customer.amount
-)||0;
-
-}
-else
-{
-
-pending++;
-
-remaining+=
-
-parseInt(
-customer.amount
-)||0;
-
-}
-
-});
-
-
+/* DASHBOARD VALUES */
 
 if(document.getElementById("total"))
-
 document.getElementById(
 "total"
-).innerHTML=
-total;
+).innerText=
+totalCustomers;
 
 
 
 if(document.getElementById("paid"))
-
 document.getElementById(
 "paid"
-).innerHTML=
-paid;
+).innerText=
+paidCustomers;
 
 
 
 if(document.getElementById("pending"))
-
 document.getElementById(
 "pending"
-).innerHTML=
-pending;
+).innerText=
+pendingCustomers;
 
 
 
 if(document.getElementById("collection"))
-
 document.getElementById(
 "collection"
-).innerHTML=
-
-"₹"+collection;
+).innerText=
+"Rs."+totalCollection;
 
 
 
 if(document.getElementById("remaining"))
-
 document.getElementById(
 "remaining"
-).innerHTML=
+).innerText=
+"Rs."+remainingCollection;
 
-"₹"+remaining;
+
+
+/* REPORT VALUES */
+
+if(document.getElementById("totalCustomers"))
+document.getElementById(
+"totalCustomers"
+).innerText=
+totalCustomers;
+
+
+
+if(document.getElementById("paidCustomers"))
+document.getElementById(
+"paidCustomers"
+).innerText=
+paidCustomers;
+
+
+
+if(document.getElementById("pendingCustomers"))
+document.getElementById(
+"pendingCustomers"
+).innerText=
+pendingCustomers;
+
+
+
+if(document.getElementById("totalCollection"))
+document.getElementById(
+"totalCollection"
+).innerText=
+"Rs."+totalCollection;
 
 }
 
 
 
-// =================== PAID PAGE ===================
+/* =========================
+   PAID TABLE
+========================= */
 
 function loadPaidTable(){
 
-let table=
 
+const table =
 document.getElementById(
 "paidTable"
 );
 
+
 if(!table)
 return;
 
 
-table.innerHTML=`
+
+table.innerHTML = `
 
 <tr>
 
 <th>Name</th>
+
 <th>Account</th>
+
 <th>Phone</th>
+
 <th>Amount</th>
 
 </tr>
@@ -476,25 +533,12 @@ table.innerHTML=`
 `;
 
 
-let customers=
-
-JSON.parse(
-localStorage.getItem(
-"customers"
-)
-)||[];
-
-
 
 customers.forEach(customer=>{
 
+if(customer.status=="Paid"){
 
-if(
-customer.status=="Paid"
-)
-{
-
-table.innerHTML+=`
+table.innerHTML += `
 
 <tr>
 
@@ -504,7 +548,7 @@ table.innerHTML+=`
 
 <td>${customer.phone}</td>
 
-<td>₹${customer.amount}</td>
+<td>Rs.${customer.amount}</td>
 
 </tr>
 
@@ -518,28 +562,34 @@ table.innerHTML+=`
 
 
 
-
-// =================== PENDING PAGE ===================
+/* =========================
+   PENDING TABLE
+========================= */
 
 function loadPendingTable(){
 
-let table=
 
+const table =
 document.getElementById(
 "pendingTable"
 );
 
+
 if(!table)
 return;
 
 
-table.innerHTML=`
+
+table.innerHTML = `
 
 <tr>
 
 <th>Name</th>
+
 <th>Account</th>
+
 <th>Phone</th>
+
 <th>Amount</th>
 
 </tr>
@@ -547,25 +597,12 @@ table.innerHTML=`
 `;
 
 
-let customers=
-
-JSON.parse(
-localStorage.getItem(
-"customers"
-)
-)||[];
-
-
 
 customers.forEach(customer=>{
 
+if(customer.status=="Pending"){
 
-if(
-customer.status!="Paid"
-)
-{
-
-table.innerHTML+=`
+table.innerHTML += `
 
 <tr>
 
@@ -575,7 +612,7 @@ table.innerHTML+=`
 
 <td>${customer.phone}</td>
 
-<td>₹${customer.amount}</td>
+<td>Rs.${customer.amount}</td>
 
 </tr>
 
@@ -589,69 +626,65 @@ table.innerHTML+=`
 
 
 
-// =================== NOTIFICATIONS ===================
+/* =========================
+   NOTIFICATIONS
+========================= */
 
 function loadNotifications(){
 
-let customers=
 
-JSON.parse(
-localStorage.getItem(
-"customers"
-)
-)||[];
-
-
-let list=
-
+const list =
 document.getElementById(
 "notificationList"
 );
+
 
 if(!list)
 return;
 
 
-list.innerHTML="";
+
+list.innerHTML = "";
 
 
-let today=
+const today =
 new Date();
+
 
 
 customers.forEach(customer=>{
 
 
-let due=
+const dueDate =
+new Date(customer.dueDate);
 
-new Date(
-customer.dueDate
-);
 
 
 if(
 
-customer.status!="Paid"
+customer.status=="Pending"
 &&
-due<=today
+dueDate <= today
 
-)
+){
 
-{
+list.innerHTML += `
 
-list.innerHTML+=
-
-`<li>
+<li>
 
 🔔 ${customer.name}
+payment overdue
 
-<button onclick='sendReminder(${JSON.stringify(customer)})'>
+<button
+onclick="sendReminder('${customer.phone}','${customer.name}','${customer.amount}')">
 
 Send
 
 </button>
 
-</li>`;
+</li>
+
+`;
 
 }
 
@@ -661,36 +694,34 @@ Send
 
 
 
+/* =========================
+   WHATSAPP REMINDER
+========================= */
 
-// =================== WHATSAPP ===================
+function sendReminder(
+phone,
+name,
+amount
+){
 
-function sendReminder(customer){
+const message =
 
-let message=
+"Hello "+name+
 
-"Hello "+
+", Your RD payment of Rs."+amount+
 
-customer.name+
-
-", Your RD payment ₹"+
-
-customer.amount+
-
-" is pending.";
-
+" is pending. Please pay soon.";
 
 
 window.open(
 
-"https://wa.me/91"+
-
-customer.phone+
+"https://wa.me/91"+phone+
 
 "?text="+
 
-encodeURIComponent(
-message
-)
+encodeURIComponent(message),
+
+"_blank"
 
 );
 
@@ -698,32 +729,90 @@ message
 
 
 
-// =================== CLEAR ===================
+/* =========================
+   SEARCH CUSTOMER
+========================= */
 
-function clearInputs(){
+function searchCustomer(){
 
+
+const input =
 document.getElementById(
-"name"
-).value="";
+"search"
+);
 
-document.getElementById(
-"age"
-).value="";
 
-document.getElementById(
-"account"
-).value="";
+const filter =
+input.value.toUpperCase();
 
-document.getElementById(
-"phone"
-).value="";
 
+const table =
 document.getElementById(
-"amount"
-).value="";
+"customerTable"
+);
 
-document.getElementById(
-"dueDate"
-).value="";
+
+const tr =
+table.getElementsByTagName(
+"tr"
+);
+
+
+
+for(let i=1;i<tr.length;i++){
+
+
+const td =
+tr[i].getElementsByTagName(
+"td"
+)[0];
+
+
+if(td){
+
+const txtValue =
+td.textContent ||
+td.innerText;
+
+
+if(
+
+txtValue.toUpperCase()
+.indexOf(filter)>-1
+
+){
+
+tr[i].style.display="";
 
 }
+else{
+
+tr[i].style.display="none";
+
+}
+
+}
+
+}
+
+}
+
+
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+window.onload=function(){
+
+loadCustomers();
+
+updateDashboard();
+
+loadPaidTable();
+
+loadPendingTable();
+
+loadNotifications();
+
+};
